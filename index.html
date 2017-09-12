@@ -125,117 +125,37 @@ $(document).ready(function () {
 <p>With SQL, you can filter columns with SELECT and rows with WHERE. Let’s look at an example from the Lahman baseball database. First, we need to load some packages.</p>
 <pre class="r"><code>library(Lahman)
 library(sqldf)</code></pre>
-</div>
-<div id="order-by" class="section level2">
-<h2>Order By</h2>
-<p>Suppose we want to see the homerun totals for the 1927 Yankees. We could write the following:</p>
-<pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR FROM Batting
-WHERE teamID='NYA' and yearID=1927&quot;
+<p>Example 1: Suppose we wanted to see the homerun totals from the New York yankees</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID,teamID,yearID,HR FROM Batting WHERE teamID='NYA' and yearID=1927&quot;
 sqldf(query)</code></pre>
-<pre><code>##     playerID yearID teamID HR
-## 1  beallwa01   1927    NYA  0
-## 2  bengobe01   1927    NYA  0
-## 3  collipa01   1927    NYA  7
-## 4  combsea01   1927    NYA  6
-## 5  duganjo01   1927    NYA  2
-## 6  durstce01   1927    NYA  0
-## 7  gazelmi01   1927    NYA  0
-## 8  gehrilo01   1927    NYA 47
-## 9  giardjo01   1927    NYA  0
-## 10 grabojo01   1927    NYA  0
-## 11  hoytwa01   1927    NYA  0
-## 12 koenima01   1927    NYA  3
-## 13 lazzeto01   1927    NYA 18
-## 14 meusebo01   1927    NYA  8
-## 15 moorewi01   1927    NYA  1
-## 16 morehra01   1927    NYA  1
-## 17 paschbe01   1927    NYA  2
-## 18 pennohe01   1927    NYA  0
-## 19 pipgrge01   1927    NYA  1
-## 20 ruethdu01   1927    NYA  1
-## 21  ruthba01   1927    NYA 60
-## 22 shawkbo01   1927    NYA  0
-## 23 shockur01   1927    NYA  0
-## 24 thomamy01   1927    NYA  0
-## 25  weraju01   1927    NYA  1</code></pre>
-<p>Suppose we want to see the homerun</p>
-<pre class="r"><code>query&lt;-&quot;SELECT teamID, playerID, YearID,HR FROM Batting
-WHERE HR&gt;50
-ORDER BY HR DESC&quot;
-sqldf(query)</code></pre>
-<pre><code>##    teamID  playerID yearID HR
-## 1     SFN bondsba01   2001 73
-## 2     SLN mcgwima01   1998 70
-## 3     CHN  sosasa01   1998 66
-## 4     SLN mcgwima01   1999 65
-## 5     CHN  sosasa01   2001 64
-## 6     CHN  sosasa01   1999 63
-## 7     NYA marisro01   1961 61
-## 8     NYA  ruthba01   1927 60
-## 9     NYA  ruthba01   1921 59
-## 10    PHA  foxxji01   1932 58
-## 11    DET greenha01   1938 58
-## 12    PHI howarry01   2006 58
-## 13    ARI gonzalu01   2001 57
-## 14    TEX rodrial01   2002 57
-## 15    CHN wilsoha01   1930 56
-## 16    SEA griffke02   1997 56
-## 17    SEA griffke02   1998 56
-## 18    NYA  ruthba01   1920 54
-## 19    NYA  ruthba01   1928 54
-## 20    PIT kinerra01   1949 54
-## 21    NYA mantlmi01   1961 54
-## 22    BOS ortizda01   2006 54
-## 23    NYA rodrial01   2007 54
-## 24    TOR bautijo02   2010 54
-## 25    BAL davisch02   2013 53
-## 26    NYA mantlmi01   1956 52
-## 27    SFN  mayswi01   1965 52
-## 28    CIN fostege01   1977 52
-## 29    OAK mcgwima01   1996 52
-## 30    TEX rodrial01   2001 52
-## 31    CLE thomeji01   2002 52
-## 32    PIT kinerra01   1947 51
-## 33    NY1  mizejo01   1947 51
-## 34    NY1  mayswi01   1955 51
-## 35    DET fieldce01   1990 51
-## 36    ATL jonesan01   2005 51</code></pre>
-<p>Suppose we wanted to see players who have hit more than 40 homeruns with less than 60 strikeouts</p>
-<pre class="r"><code>query&lt;-&quot;SELECT playerid, yearid, teamid, HR, SO FROM Batting
-WHERE SO&lt;60 and HR&gt;40&quot;
-sqldf(query)</code></pre>
-<pre><code>##     playerID yearID teamID HR SO
-## 1  hornsro01   1922    SLN 42 50
-## 2  willicy01   1923    PHI 41 57
-## 3    ottme01   1929    NY1 42 38
-## 4  gehrilo01   1931    NYA 46 56
-## 5   ruthba01   1931    NYA 46 51
-## 6  gehrilo01   1934    NYA 49 31
-## 7  gehrilo01   1936    NYA 49 46
-## 8  troskha01   1936    CLE 42 58
-## 9  dimagjo01   1937    NYA 46 37
-## 10  mizejo01   1940    SLN 43 49
-## 11  mizejo01   1947    NY1 51 42
-## 12 willite01   1949    BOS 43 48
-## 13 kinerra01   1951    PIT 42 57
-## 14 camparo01   1953    BRO 41 58
-## 15 rosenal01   1953    CLE 43 48
-## 16 kluszte01   1954    CIN 49 35
-## 17  mayswi01   1954    NY1 41 57
-## 18 kluszte01   1955    CIN 47 40
-## 19 aaronha01   1957    ML1 44 58
-## 20 sievero01   1957    WS1 42 55
-## 21 aaronha01   1969    ATL 44 47
-## 22 aaronha01   1971    ATL 47 58
-## 23 thomafr04   1993    CHA 41 54
-## 24 bondsba01   2002    SFN 46 47
-## 25 bondsba01   2003    SFN 45 58
-## 26 bondsba01   2004    SFN 45 41
-## 27 pujolal01   2004    SLN 46 52
-## 28 pujolal01   2006    SLN 49 50</code></pre>
-<p>Suppose we want to see players on the New York Yankees who have atleast 40 homeruns</p>
-<pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR FROM Batting
-WHERE teamID='NYA' and HR&gt;=40&quot;
+<pre><code>##     playerID teamID yearID HR
+## 1  beallwa01    NYA   1927  0
+## 2  bengobe01    NYA   1927  0
+## 3  collipa01    NYA   1927  7
+## 4  combsea01    NYA   1927  6
+## 5  duganjo01    NYA   1927  2
+## 6  durstce01    NYA   1927  0
+## 7  gazelmi01    NYA   1927  0
+## 8  gehrilo01    NYA   1927 47
+## 9  giardjo01    NYA   1927  0
+## 10 grabojo01    NYA   1927  0
+## 11  hoytwa01    NYA   1927  0
+## 12 koenima01    NYA   1927  3
+## 13 lazzeto01    NYA   1927 18
+## 14 meusebo01    NYA   1927  8
+## 15 moorewi01    NYA   1927  1
+## 16 morehra01    NYA   1927  1
+## 17 paschbe01    NYA   1927  2
+## 18 pennohe01    NYA   1927  0
+## 19 pipgrge01    NYA   1927  1
+## 20 ruethdu01    NYA   1927  1
+## 21  ruthba01    NYA   1927 60
+## 22 shawkbo01    NYA   1927  0
+## 23 shockur01    NYA   1927  0
+## 24 thomamy01    NYA   1927  0
+## 25  weraju01    NYA   1927  1</code></pre>
+<p>Example 2: Suppose we waned to see players on the New York Yankees who have atleast 40 homeruns</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR FROM Batting WHERE teamID='NYA' and HR&gt;=40&quot;
 sqldf(query)</code></pre>
 <pre><code>##     playerID yearID teamID HR
 ## 1   ruthba01   1920    NYA 54
@@ -268,6 +188,201 @@ sqldf(query)</code></pre>
 ## 28 rodrial01   2007    NYA 54
 ## 29 grandcu01   2011    NYA 41
 ## 30 grandcu01   2012    NYA 43</code></pre>
+<p>Example 3: Suppose we wanted to see players who have hit more than 40 homeruns with less than 60 strikeouts</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID,teamID,yearID,HR,SO FROM Batting WHERE HR&gt;40 and SO&lt;60&quot;
+sqldf(query)</code></pre>
+<pre><code>##     playerID teamID yearID HR SO
+## 1  hornsro01    SLN   1922 42 50
+## 2  willicy01    PHI   1923 41 57
+## 3    ottme01    NY1   1929 42 38
+## 4  gehrilo01    NYA   1931 46 56
+## 5   ruthba01    NYA   1931 46 51
+## 6  gehrilo01    NYA   1934 49 31
+## 7  gehrilo01    NYA   1936 49 46
+## 8  troskha01    CLE   1936 42 58
+## 9  dimagjo01    NYA   1937 46 37
+## 10  mizejo01    SLN   1940 43 49
+## 11  mizejo01    NY1   1947 51 42
+## 12 willite01    BOS   1949 43 48
+## 13 kinerra01    PIT   1951 42 57
+## 14 camparo01    BRO   1953 41 58
+## 15 rosenal01    CLE   1953 43 48
+## 16 kluszte01    CIN   1954 49 35
+## 17  mayswi01    NY1   1954 41 57
+## 18 kluszte01    CIN   1955 47 40
+## 19 aaronha01    ML1   1957 44 58
+## 20 sievero01    WS1   1957 42 55
+## 21 aaronha01    ATL   1969 44 47
+## 22 aaronha01    ATL   1971 47 58
+## 23 thomafr04    CHA   1993 41 54
+## 24 bondsba01    SFN   2002 46 47
+## 25 bondsba01    SFN   2003 45 58
+## 26 bondsba01    SFN   2004 45 41
+## 27 pujolal01    SLN   2004 46 52
+## 28 pujolal01    SLN   2006 49 50</code></pre>
+</div>
+<div id="order-by" class="section level2">
+<h2>Order By</h2>
+<p>With SQL, we can also use Order By to sort information. Below are a few examples in which we used Order By.</p>
+<p>Example 1: Suppose we wanted to see players who have more than 50 homeruns, where the order goes from top to bottom according to highest homerun total</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR FROM Batting 
+WHERE HR&gt;50 
+ORDER BY HR DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##     playerID yearID teamID HR
+## 1  bondsba01   2001    SFN 73
+## 2  mcgwima01   1998    SLN 70
+## 3   sosasa01   1998    CHN 66
+## 4  mcgwima01   1999    SLN 65
+## 5   sosasa01   2001    CHN 64
+## 6   sosasa01   1999    CHN 63
+## 7  marisro01   1961    NYA 61
+## 8   ruthba01   1927    NYA 60
+## 9   ruthba01   1921    NYA 59
+## 10  foxxji01   1932    PHA 58
+## 11 greenha01   1938    DET 58
+## 12 howarry01   2006    PHI 58
+## 13 gonzalu01   2001    ARI 57
+## 14 rodrial01   2002    TEX 57
+## 15 wilsoha01   1930    CHN 56
+## 16 griffke02   1997    SEA 56
+## 17 griffke02   1998    SEA 56
+## 18  ruthba01   1920    NYA 54
+## 19  ruthba01   1928    NYA 54
+## 20 kinerra01   1949    PIT 54
+## 21 mantlmi01   1961    NYA 54
+## 22 ortizda01   2006    BOS 54
+## 23 rodrial01   2007    NYA 54
+## 24 bautijo02   2010    TOR 54
+## 25 davisch02   2013    BAL 53
+## 26 mantlmi01   1956    NYA 52
+## 27  mayswi01   1965    SFN 52
+## 28 fostege01   1977    CIN 52
+## 29 mcgwima01   1996    OAK 52
+## 30 rodrial01   2001    TEX 52
+## 31 thomeji01   2002    CLE 52
+## 32 kinerra01   1947    PIT 51
+## 33  mizejo01   1947    NY1 51
+## 34  mayswi01   1955    NY1 51
+## 35 fieldce01   1990    DET 51
+## 36 jonesan01   2005    ATL 51</code></pre>
+<p>Example 2: Suppose we wanted to see players who have batted atleast 400 times while striking out less than 10 times where the order descends with the most strike outs at the top</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,SO,HR,AB FROM Batting 
+WHERE SO&lt;10 and AB&gt;=400
+ORDER BY SO DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##     playerID yearID teamID SO HR  AB
+## 1  ansonca01   1883    CHN  9  0 413
+## 2  broutda01   1887    DTN  9 12 500
+## 3    hoydu01   1893    WAS  9  0 564
+## 4  bierblo01   1894    PIT  9  3 525
+## 5  broutda01   1894    BLN  9  9 525
+## 6  milledo01   1894    SLN  9  8 481
+## 7  keelewi01   1896    BLN  9  4 544
+## 8  mckeaed01   1896    CL4  9  7 571
+## 9  speaktr01   1918    CLE  9  0 471
+## 10  dealch01   1921    CHN  9  3 422
+## 11 mcinnst01   1921    BOS  9  0 584
+## 12 severha01   1921    SLA  9  2 472
+## 13  highan01   1926    BSN  9  2 476
+## 14 summaho01   1926    CLE  9  4 581
+## 15 seweljo01   1928    CLE  9  4 588
+## 16  ricesa01   1929    WS1  9  1 616
+## 17 leachfr01   1931    NY1  9  6 515
+## 18 busched01   1945    PHA  9  0 416
+## 19 holmeto01   1945    BSN  9 28 636
+## 20 boudrlo01   1948    CLE  9 18 560
+## 21 mitchda01   1952    CLE  9  5 511
+## 22 connoro01   1885    NY1  8  1 455
+## 23 glassja01   1887    IN3  8  0 483
+## 24 glassja01   1890    NY1  8  1 512
+## 25 donovpa01   1893    PIT  8  2 499
+## 26 dungasa01   1893    CHN  8  2 465
+## 27 pinknge01   1893    LS3  8  1 446
+## 28 brodist01   1894    BLN  8  3 573
+## 29 quinnjo02   1894    SLN  8  4 405
+## 30 bierblo01   1895    PIT  8  0 466
+## 31 crossla01   1895    PHI  8  2 535
+## 32   hoydu01   1895    CIN  8  3 429
+## 33 roushed01   1921    CIN  8  4 418
+## 34 collied01   1923    CHA  8  5 505
+## 35 collied01   1925    CHA  8  3 425
+## 36 speaktr01   1927    WS1  8  2 523
+## 37 cochrmi01   1929    PHA  8  7 514
+## 38 seweljo01   1931    NYA  8  6 484
+## 39 wanerll01   1933    PIT  8  0 500
+## 40 verbaem01   1947    PHI  8  0 540
+## 41  wardjo01   1889    NY1  7  1 479
+## 42 crossla01   1893    PHI  7  4 415
+## 43 quinnjo02   1893    SLN  7  0 547
+## 44 crossla01   1894    PHI  7  7 529
+## 45 vaughfa01   1896    CIN  7  2 433
+## 46 cochrmi01   1927    PHA  7 12 432
+## 47 seweljo01   1927    CLE  7  1 569
+## 48 traynpi01   1929    PIT  7  4 540
+## 49 muelldo01   1956    NY1  7  5 453
+## 50 wrighge01   1875    BS1  6  2 408
+## 51 broutda01   1889    BSN  6  7 485
+## 52 keelewi01   1894    BLN  6  5 590
+## 53  wardjo01   1894    NY1  6  0 540
+## 54 quinnjo02   1895    SLN  6  2 543
+## 55 mcinnst01   1924    BSN  6  1 581
+## 56 seweljo01   1926    CLE  6  4 578
+## 57  wardjo01   1893    NY1  5  2 588
+## 58 holloch01   1922    CHN  5  3 592
+## 59 mcinnst01   1922    CLE  5  1 537
+## 60 wanerll01   1936    PIT  5  1 414
+## 61 seweljo01   1925    CLE  4  1 608
+## 62 seweljo01   1929    CLE  4  7 578
+## 63 seweljo01   1933    NYA  4  2 524
+## 64 doyleja01   1894    NY1  3  3 422
+## 65 seweljo01   1932    NYA  3 11 503</code></pre>
+</div>
+<div id="aggregation" class="section level2">
+<h2>Aggregation</h2>
+<p>With SQL, we can also combine information into one group. Below are a few examples of how we used aggregation.</p>
+<p>Example 1:Suppose we wanted to see the sum all of Babe Ruths homeruns</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID, sum(HR) FROM Batting 
+WHERE playerID='ruthba01'
+GROUP BY playerID&quot;
+sqldf(query)</code></pre>
+<pre><code>##   playerID sum(HR)
+## 1 ruthba01     714</code></pre>
+<p>Example 2:Suppose we wanted to see the sum of all players homeruns who have atleast 600 homeruns in descending order</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID, sum(HR) FROM Batting 
+GROUP BY playerID
+HAVING sum(HR)&gt;=600
+ORDER BY HR DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##    playerID sum(HR)
+## 1 bondsba01     762
+## 2  sosasa01     609
+## 3 aaronha01     755
+## 4 rodrial01     696
+## 5  mayswi01     660
+## 6  ruthba01     714
+## 7 thomeji01     612
+## 8 griffke02     630</code></pre>
+<p>Example 3: Suppose we wanted to see all players whose average homeruns is greater than 30 in descending order</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID, avg(HR) FROM Batting 
+GROUP BY playerID
+HAVING avg(HR)&gt;30
+ORDER BY avg(HR) DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##     playerID  avg(HR)
+## 1  pujolal01 36.93750
+## 2  bondsba01 34.63636
+## 3  mcgwima01 34.29412
+## 4  kinerra01 33.54545
+## 5  aaronha01 32.82609
+## 6  bryankr01 32.50000
+## 7   ruthba01 32.45455
+## 8   sosasa01 32.05263
+## 9  cabremi01 31.85714
+## 10 belleal01 31.75000
+## 11 rodrial01 31.63636
+## 12 schmimi01 30.44444
+## 13 abreujo02 30.33333</code></pre>
 </div>
 
 

@@ -12,38 +12,74 @@ library(Lahman)
 library(sqldf)
 ```
 
-## Order By
-Suppose we want to see the homerun totals for the 1927 Yankees. We could write the following: 
-
+Example 1: Suppose we wanted to see the homerun totals from the New York yankees 
 ```{r}
-query<-"SELECT playerID,yearID,teamID,HR FROM Batting
-WHERE teamID='NYA' and yearID=1927"
+query<-"SELECT playerID,teamID,yearID,HR FROM Batting WHERE teamID='NYA' and yearID=1927"
 sqldf(query)
-
 ```
 
-Suppose we want to see the homerun
+Example 2: Suppose we waned to see players on the New York Yankees who have atleast 40 homeruns
 ```{r}
-query<-"SELECT teamID, playerID, YearID,HR FROM Batting
-WHERE HR>50
+query<-"SELECT playerID,yearID,teamID,HR FROM Batting WHERE teamID='NYA' and HR>=40"
+sqldf(query)
+```
+
+Example 3: Suppose we wanted to see players who have hit more than 40 homeruns with less than 60 strikeouts 
+```{r}
+query<-"SELECT playerID,teamID,yearID,HR,SO FROM Batting WHERE HR>40 and SO<60"
+sqldf(query)
+```
+
+## Order By
+
+With SQL, we can also use Order By to sort information. Below are a few examples in which we used Order By. 
+
+
+Example 1: Suppose we wanted to see players who have more than 50 homeruns, where the order goes from top to bottom according to highest homerun total 
+```{r}
+query<-"SELECT playerID,yearID,teamID,HR FROM Batting 
+WHERE HR>50 
 ORDER BY HR DESC"
 sqldf(query)
-
 ```
 
-Suppose we wanted to see players who have hit more than 40 homeruns with less than 60 strikeouts 
+Example 2: Suppose we wanted to see players who have batted atleast 400 times while striking out less than 10 times where the order descends with the most strike outs at the top
 ```{r}
-query<-"SELECT playerid, yearid, teamid, HR, SO FROM Batting
-WHERE SO<60 and HR>40"
+query<-"SELECT playerID,yearID,teamID,SO,HR,AB FROM Batting 
+WHERE SO<10 and AB>=400
+ORDER BY SO DESC"
 sqldf(query)
-
 ```
 
-Suppose we want to see players on the New York Yankees who have atleast 40 homeruns
+##Aggregation
+
+With SQL, we can also combine information into one group. Below are a few examples of how we used aggregation. 
+
+Example 1:Suppose we wanted to see the sum all of Babe Ruths homeruns 
 ```{r}
-query<-"SELECT playerID,yearID,teamID,HR FROM Batting
-WHERE teamID='NYA' and HR>=40"
+query<-"SELECT playerID, sum(HR) FROM Batting 
+WHERE playerID='ruthba01'
+GROUP BY playerID"
 sqldf(query)
-
 ```
+
+Example 2:Suppose we wanted to see the sum of all players homeruns who have atleast 600 homeruns in descending order 
+```{r}
+query<-"SELECT playerID, sum(HR) FROM Batting 
+GROUP BY playerID
+HAVING sum(HR)>=600
+ORDER BY HR DESC"
+sqldf(query)
+```
+
+Example 3: Suppose we wanted to see all players whose average homeruns is greater than 30 in descending order
+```{r}
+query<-"SELECT playerID, avg(HR) FROM Batting 
+GROUP BY playerID
+HAVING avg(HR)>30
+ORDER BY avg(HR) DESC"
+sqldf(query)
+```
+
+
 
