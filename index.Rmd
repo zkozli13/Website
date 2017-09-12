@@ -12,11 +12,37 @@ library(Lahman)
 library(sqldf)
 ```
 
+## Order By
 Suppose we want to see the homerun totals for the 1927 Yankees. We could write the following: 
 
 ```{r}
 query<-"SELECT playerID,yearID,teamID,HR FROM Batting
 WHERE teamID='NYA' and yearID=1927"
+sqldf(query)
+
+```
+
+Suppose we want to see the homerun
+```{r}
+query<-"SELECT teamID, playerID, YearID,HR FROM Batting
+WHERE HR>50
+ORDER BY HR DESC"
+sqldf(query)
+
+```
+
+Suppose we wanted to see players who have hit more than 40 homeruns with less than 60 strikeouts 
+```{r}
+query<-"SELECT playerid, yearid, teamid, HR, SO FROM Batting
+WHERE SO<60 and HR>40"
+sqldf(query)
+
+```
+
+Suppose we want to see players on the New York Yankees who have atleast 40 homeruns
+```{r}
+query<-"SELECT playerID,yearID,teamID,HR FROM Batting
+WHERE teamID='NYA' and HR>=40"
 sqldf(query)
 
 ```

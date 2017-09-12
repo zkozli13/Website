@@ -125,6 +125,9 @@ $(document).ready(function () {
 <p>With SQL, you can filter columns with SELECT and rows with WHERE. Let’s look at an example from the Lahman baseball database. First, we need to load some packages.</p>
 <pre class="r"><code>library(Lahman)
 library(sqldf)</code></pre>
+</div>
+<div id="order-by" class="section level2">
+<h2>Order By</h2>
 <p>Suppose we want to see the homerun totals for the 1927 Yankees. We could write the following:</p>
 <pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR FROM Batting
 WHERE teamID='NYA' and yearID=1927&quot;
@@ -155,6 +158,116 @@ sqldf(query)</code></pre>
 ## 23 shockur01   1927    NYA  0
 ## 24 thomamy01   1927    NYA  0
 ## 25  weraju01   1927    NYA  1</code></pre>
+<p>Suppose we want to see the homerun</p>
+<pre class="r"><code>query&lt;-&quot;SELECT teamID, playerID, YearID,HR FROM Batting
+WHERE HR&gt;50
+ORDER BY HR DESC&quot;
+sqldf(query)</code></pre>
+<pre><code>##    teamID  playerID yearID HR
+## 1     SFN bondsba01   2001 73
+## 2     SLN mcgwima01   1998 70
+## 3     CHN  sosasa01   1998 66
+## 4     SLN mcgwima01   1999 65
+## 5     CHN  sosasa01   2001 64
+## 6     CHN  sosasa01   1999 63
+## 7     NYA marisro01   1961 61
+## 8     NYA  ruthba01   1927 60
+## 9     NYA  ruthba01   1921 59
+## 10    PHA  foxxji01   1932 58
+## 11    DET greenha01   1938 58
+## 12    PHI howarry01   2006 58
+## 13    ARI gonzalu01   2001 57
+## 14    TEX rodrial01   2002 57
+## 15    CHN wilsoha01   1930 56
+## 16    SEA griffke02   1997 56
+## 17    SEA griffke02   1998 56
+## 18    NYA  ruthba01   1920 54
+## 19    NYA  ruthba01   1928 54
+## 20    PIT kinerra01   1949 54
+## 21    NYA mantlmi01   1961 54
+## 22    BOS ortizda01   2006 54
+## 23    NYA rodrial01   2007 54
+## 24    TOR bautijo02   2010 54
+## 25    BAL davisch02   2013 53
+## 26    NYA mantlmi01   1956 52
+## 27    SFN  mayswi01   1965 52
+## 28    CIN fostege01   1977 52
+## 29    OAK mcgwima01   1996 52
+## 30    TEX rodrial01   2001 52
+## 31    CLE thomeji01   2002 52
+## 32    PIT kinerra01   1947 51
+## 33    NY1  mizejo01   1947 51
+## 34    NY1  mayswi01   1955 51
+## 35    DET fieldce01   1990 51
+## 36    ATL jonesan01   2005 51</code></pre>
+<p>Suppose we wanted to see players who have hit more than 40 homeruns with less than 60 strikeouts</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerid, yearid, teamid, HR, SO FROM Batting
+WHERE SO&lt;60 and HR&gt;40&quot;
+sqldf(query)</code></pre>
+<pre><code>##     playerID yearID teamID HR SO
+## 1  hornsro01   1922    SLN 42 50
+## 2  willicy01   1923    PHI 41 57
+## 3    ottme01   1929    NY1 42 38
+## 4  gehrilo01   1931    NYA 46 56
+## 5   ruthba01   1931    NYA 46 51
+## 6  gehrilo01   1934    NYA 49 31
+## 7  gehrilo01   1936    NYA 49 46
+## 8  troskha01   1936    CLE 42 58
+## 9  dimagjo01   1937    NYA 46 37
+## 10  mizejo01   1940    SLN 43 49
+## 11  mizejo01   1947    NY1 51 42
+## 12 willite01   1949    BOS 43 48
+## 13 kinerra01   1951    PIT 42 57
+## 14 camparo01   1953    BRO 41 58
+## 15 rosenal01   1953    CLE 43 48
+## 16 kluszte01   1954    CIN 49 35
+## 17  mayswi01   1954    NY1 41 57
+## 18 kluszte01   1955    CIN 47 40
+## 19 aaronha01   1957    ML1 44 58
+## 20 sievero01   1957    WS1 42 55
+## 21 aaronha01   1969    ATL 44 47
+## 22 aaronha01   1971    ATL 47 58
+## 23 thomafr04   1993    CHA 41 54
+## 24 bondsba01   2002    SFN 46 47
+## 25 bondsba01   2003    SFN 45 58
+## 26 bondsba01   2004    SFN 45 41
+## 27 pujolal01   2004    SLN 46 52
+## 28 pujolal01   2006    SLN 49 50</code></pre>
+<p>Suppose we want to see players on the New York Yankees who have atleast 40 homeruns</p>
+<pre class="r"><code>query&lt;-&quot;SELECT playerID,yearID,teamID,HR FROM Batting
+WHERE teamID='NYA' and HR&gt;=40&quot;
+sqldf(query)</code></pre>
+<pre><code>##     playerID yearID teamID HR
+## 1   ruthba01   1920    NYA 54
+## 2   ruthba01   1921    NYA 59
+## 3   ruthba01   1923    NYA 41
+## 4   ruthba01   1924    NYA 46
+## 5   ruthba01   1926    NYA 47
+## 6  gehrilo01   1927    NYA 47
+## 7   ruthba01   1927    NYA 60
+## 8   ruthba01   1928    NYA 54
+## 9   ruthba01   1929    NYA 46
+## 10 gehrilo01   1930    NYA 41
+## 11  ruthba01   1930    NYA 49
+## 12 gehrilo01   1931    NYA 46
+## 13  ruthba01   1931    NYA 46
+## 14  ruthba01   1932    NYA 41
+## 15 gehrilo01   1934    NYA 49
+## 16 gehrilo01   1936    NYA 49
+## 17 dimagjo01   1937    NYA 46
+## 18 mantlmi01   1956    NYA 52
+## 19 mantlmi01   1958    NYA 42
+## 20 mantlmi01   1960    NYA 40
+## 21 mantlmi01   1961    NYA 54
+## 22 marisro01   1961    NYA 61
+## 23 jacksre01   1980    NYA 41
+## 24 martiti02   1997    NYA 44
+## 25 giambja01   2002    NYA 41
+## 26 giambja01   2003    NYA 41
+## 27 rodrial01   2005    NYA 48
+## 28 rodrial01   2007    NYA 54
+## 29 grandcu01   2011    NYA 41
+## 30 grandcu01   2012    NYA 43</code></pre>
 </div>
 
 
