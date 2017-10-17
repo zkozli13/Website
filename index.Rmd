@@ -51,7 +51,7 @@ ORDER BY SO DESC"
 sqldf(query)
 ```
 
-##Aggregation
+## Aggregation
 
 With SQL, we can also combine information into one group. Below are a few examples of how we used aggregation. 
 
