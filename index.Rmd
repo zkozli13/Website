@@ -82,7 +82,7 @@ sqldf(query)
 ```
 
 
-##Joins
+## Joins
 
 With Joining, we can make tables based on common data in order to make more data output options
 
