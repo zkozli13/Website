@@ -82,4 +82,68 @@ sqldf(query)
 ```
 
 
+##Joins
+
+With Joining, we can make tables based on common data in order to make more data output options
+
+Example 1: Suppose we want to see the first and last name, along with team, year, and homeruns for Babe Ruth
+```{r}
+query<-"SELECT nameFIRST,nameLAST,teamID,yearID,HR 
+FROM Batting INNER JOIN Master
+ON Batting.playerID=Master.playerID
+WHERE Batting.playerID='ruthba01'"
+sqldf(query)
+```
+
+Example 2: Suppose we wanted to find all instances of players getting more than 50 homeruns starting with the greatest number. Include first and last names, team, year, and home runs.
+```{r}
+query<-"SELECT nameFIRST,nameLAST,teamID,yearID,HR
+FROM Batting INNER JOIN Master
+On Batting.playerID=Master.playerID
+WHERE HR>50
+ORDER BY HR DESC"
+sqldf(query)
+```
+
+Example 3: Suppose we wanted to find Babe Ruth's homeruns by season, with the team name displayed.
+```{r}
+query<-"SELECT playerID,name,Batting.yearID,Batting.HR
+FROM Batting INNER JOIN Teams
+ON Batting.teamID=Teams.teamID and Batting.yearID=Teams.yearID
+WHERE playerID='ruthba01'"
+sqldf(query)
+```
+
+Example 4: Suppose we wanted to find Babe Ruth's homerun totals, with first and last name and the full team name displayed.
+
+```{r}
+query<-"SELECT nameFIRST,nameLAST,name,Batting.yearID,Batting.HR 
+FROM (Batting INNER JOIN Master
+ON Batting.playerID=Master.playerID) INNER JOIN Teams 
+ON Batting.teamID=Teams.teamID and Batting.yearID=Teams.yearID
+WHERE Batting.playerID='ruthba01'"
+sqldf(query)
+```
+
+Example 5: Suppose we wanted to find career homerun totals for players who have at least 600 homeruns. Display from the highest amount to the lowest, with the first and last names.
+```{r}
+query<-"SELECT nameFIRST,nameLAST,sum(HR)
+FROM Batting INNER JOIN Master
+ON Batting.playerID=Master.playerID
+GROUP BY Batting.playerID
+HAVING sum(HR)>=600
+ORDER BY sum(HR) DESC"
+sqldf(query)
+```
+
+Example 6: Suppose we wanted to list all players, first and last name, with the first name of Bob who averaged more than one million dollars salary over their career.
+```{r}
+query<-"SELECT nameFIRST,nameLAST,avg(salary)
+FROM Salaries INNER JOIN Master
+ON Salaries.playerID=Master.playerID
+GROUP BY Salaries.playerID
+HAVING nameFIRST='Bob' and avg(salary)>1000000
+ORDER BY avg(salary) DESC"
+sqldf(query)
+```
 
